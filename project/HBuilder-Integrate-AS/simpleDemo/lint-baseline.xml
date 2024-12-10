@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="5">
+    <issue id="ExpiredTargetSdkVersion">
+        <location file="D:\code\android\Android-SDK@4.36.82272_20241127\HBuilder-Integrate-AS\simpleDemo\build.gradle" line="10"/>
+        <message><![CDATA[Google Play requires that apps target API level 33 or higher.]]></message>
+        <severity>Error</severity>
+        <explanation><![CDATA[Configuring your app to target a recent API level ensures that users benefit from significant security and performance improvements, while still allowing your app to run on older Android versions (down to the minSdkVersion). To update your targetSdkVersion, follow the steps from "Meeting Google Play requirements for target API level", https://developer.android.com/distribute/best - practices/develop/target-sdk.html https://support.google.com/googleplay/android-developer/answer/113469#targetsdk https://developer.android.com/distribute/best-practices/develop/target-sdk.html]]></explanation>
+    </issue>
+</issues>

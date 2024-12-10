@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 33
+    buildToolsVersion '30.0.3'
+    namespace '{{applicationId}}'
+    defaultConfig {
+        applicationId "{{applicationId}}"
+        minSdkVersion {{minSdkVersion}}
+        targetSdkVersion {{targetSdkVersion}}
+        versionCode {{versionCode}}
+        versionName "{{versionName}}"
+        multiDexEnabled true
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+		lintOptions {
+		    disable 'ExpiredTargetSdkVersion'
+		}
+    signingConfigs {
+        config {
+            keyAlias '{{keyAlias}}'
+            keyPassword '{{keyPassword}}'
+            storeFile file('{{storeFile}}')
+            storePassword '{{keyPassword}}'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    aaptOptions {
+        additionalParameters '--auto-add-overlay'
+        ignoreAssetsPattern "!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'androidx.core:core:1.1.0'
+    implementation "androidx.fragment:fragment:1.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.facebook.fresco:fresco:2.5.0'
+    implementation "com.facebook.fresco:animated-gif:2.5.0"
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.alibaba:fastjson:1.2.83'
+    implementation 'androidx.webkit:webkit:1.3.0'
+		
+		
+{{#if dependencies}}
+	{{#each dependencies}}
+		implementation '{{this}}'
+	{{/each}}
+{{/if}}
+
+
+// {{#if nativePlugins}}
+// 	{{#each nativePlugins}}
+// 		implementation project(':{{this}}')
+// 	{{/each}}
+// {{/if}}
+}
+

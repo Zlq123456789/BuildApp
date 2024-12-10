@@ -1,0 +1,56 @@
+{
+	"id": "webviewdialog",
+	"name": "webviewdialog-example",
+	"description": "webviewDialog示例",
+	"displayName": "webviewDialog示例",
+	"version": "0.0.1",
+	"publisher": "hx",
+	"engines": {
+		"HBuilderX": "^2.7.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./extension",
+	"activationEvents": [
+		"onCommand:extension.publishApp"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.publishApp",
+				"title": "本地构建APP"
+			},
+			{
+				"name": "安装apk到android手机",
+				"command": "echo '安装apk到android手机'",
+				"type": "terminal",
+				"key": ""
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "extension.publishApp",
+					"group": "z_commands"
+				},
+				{
+					"group": "z_commands"
+				}
+			]
+		}
+	},
+	"extensionDependencies": [
+		"plugin-manager"
+	],
+	"dependencies": {
+		"fs-extra": "^11.2.0",
+		"handlebars": "^4.7.8",
+		"iconv-lite": "^0.6.3",
+		"json-comments": "^0.2.1",
+		"node-cache": "^5.1.2",
+		"rimraf": "^5.0.7",
+		"shelljs": "^0.8.5",
+		"xml2js": "^0.6.2"
+	}
+}

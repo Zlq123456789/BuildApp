@@ -1,0 +1,7 @@
+include ':simpleDemo'
+
+{{#if nativePlugins}}
+{{#each nativePlugins}}
+include ':{{this}}'
+{{/each}}
+{{/if}}
