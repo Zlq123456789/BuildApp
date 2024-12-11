@@ -53,7 +53,7 @@ function appBuildGradle(params, workspaceFolder) {
 			const appBuildGradle = Handlebars.compile(fs.readFileSync(dirname('../handlebars/app.build.gradle.hbs'),
 				'utf-8'));
 			let data = {
-				applicationId: getApplicationId(params.appid),
+				applicationId: params.packageName ? params.packageName : getApplicationId(params.appid),
 				minSdkVersion: androidParams.minSdkVersion,
 				targetSdkVersion: androidParams.targetSdkVersion,
 				versionCode: params.versionCode,
@@ -130,8 +130,8 @@ function buildAndroidManifest(params, workspaceFolder) {
 				permissions: await Promise.all(permissions),
 				nativePluginsPermissions: await Promise.all(nativePluginsPermissions),
 			}
-			if(Number(androidParams.targetSdkVersion)>=31){
-				content['exported'] ='android:exported="true"'
+			if (Number(androidParams.targetSdkVersion) >= 31) {
+				content['exported'] = 'android:exported="true"'
 			}
 			const androidManifest = appBuildGradle(content)
 			const filePath = dirname('../../project/HBuilder-Integrate-AS/simpleDemo/src/main/AndroidManifest.xml')

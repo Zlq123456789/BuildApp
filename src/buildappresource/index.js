@@ -79,6 +79,8 @@ async function checkAppResource(fsPath, clallBack) {
 			if (await fsExtra.existsSync(resources)) {
 				clearInterval(id)
 				clallBack()
+			}else{
+				output.info('资源包生成中...')
 			}
 		}, 2000)
 		// fs.watch(resources, (eventType, filename) => {

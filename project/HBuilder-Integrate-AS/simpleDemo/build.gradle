@@ -3,9 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 34
     buildToolsVersion '30.0.3'
-    namespace 'uni.UNI9A78B7C'
+    namespace 'uni.UNI9A78B7C111111'
     defaultConfig {
-        applicationId "uni.UNI9A78B7C"
+        applicationId "uni.UNI9A78B7C111111"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 100

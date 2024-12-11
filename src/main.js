@@ -69,6 +69,7 @@ async function showView(param) {
 			projectData.keyPassword = projectInfo[projectData.name].keyPassword
 			projectData.storeFile = projectInfo[projectData.name].storeFile
 			projectData.keyAlias = projectInfo[projectData.name].keyAlias
+			projectData.packageName =  projectInfo[projectData.name].packageName
 		}
 
 	}
@@ -168,6 +169,7 @@ async function submitApp(appInfo, webviewDialog, webview) {
 			projectData.keyPassword = keyPassword
 			projectData.storeFile = storeFile
 			projectData.keyAlias = keyAlias
+			projectData.packageName = packageName
 			new Promise(async (resolve, reject) => {
 				// 检查环境
 				output.success("检查环境...")
