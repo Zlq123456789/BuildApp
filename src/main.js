@@ -143,13 +143,12 @@ async function submitApp(appInfo, webviewDialog, webview) {
 			versionName
 		} = appInfo;
 
-
-		// if (!appKey || !keyAlias || !keyPassword || !name || !packageName || !storeFile || !versionCode || !versionName) {
-		// 	webviewDialog.setButtonStatus("开始提交", []);
-		// 	let emsg = '所有信息必填，不能为空';
-		// 	webviewDialog.displayError(emsg);
-		// 	return
-		// }
+		if (!appKey || !keyAlias || !keyPassword || !name || !packageName || !storeFile || !versionCode || !versionName) {
+			webviewDialog.setButtonStatus("开始提交", []);
+			let emsg = '所有信息必填，不能为空';
+			webviewDialog.displayError(emsg);
+			return
+		}
 		saveProjectInfo({
 			appKey,
 			keyAlias,
@@ -162,55 +161,58 @@ async function submitApp(appInfo, webviewDialog, webview) {
 		})
 		if (startParams == null) return
 		webviewDialog.close();
-		let projectData = getProjectInfo(startParams);
-		projectData.dcloud_appkey = appKey
-		projectData.keyPassword = keyPassword
-		projectData.storeFile = storeFile
-		projectData.keyAlias = keyAlias
-		new Promise(async (resolve, reject) => {
-			// 检查环境
-			output.success("检查环境...")
-			await checkjava().catch(err => {
-				output.error(err)
-				throw new Error(err)
+		setTimeout(() => {
+
+			let projectData = getProjectInfo(startParams);
+			projectData.dcloud_appkey = appKey
+			projectData.keyPassword = keyPassword
+			projectData.storeFile = storeFile
+			projectData.keyAlias = keyAlias
+			new Promise(async (resolve, reject) => {
+				// 检查环境
+				output.success("检查环境...")
+				await checkjava().catch(err => {
+					output.error(err)
+					throw new Error(err)
+				})
+				output.success("环境通过")
+
+
+				// 生成本地打包APP资源
+				output.success("生成本地APP资源: " + startParams.workspaceFolder.name)
+				await buildappresource({
+					fsPath: startParams.fsPath,
+					projectName: startParams.workspaceFolder.name,
+					isExtension: isExtension
+				}).catch(err => {
+					output.error(err)
+					throw new Error(err)
+				})
+				output.success("生成本地APP资源完成")
+
+
+				// 构建模板
+				output.success("开始构建模板数据...")
+				await buildtemplate(projectData, startParams).catch((err) => {
+					output.error(err)
+					throw new Error(err)
+				})
+				output.success("构建模板数据完成")
+
+
+				output.success("正在编译中...")
+				// // 开始构建
+				await buildapp({
+					fsPath: startParams.fsPath,
+					projectName: startParams.workspaceFolder.name
+				}).catch(err => {
+					output.error(err)
+					throw new Error(err)
+				})
+				output.success("APP打包完成")
 			})
-			output.success("环境通过")
 
-
-			// 生成本地打包APP资源
-			output.success("生成本地APP资源: " + startParams.workspaceFolder.name)
-			await buildappresource({
-				fsPath: startParams.fsPath,
-				projectName: startParams.workspaceFolder.name,
-				isExtension: isExtension
-			}).catch(err => {
-				output.error(err)
-				throw new Error(err)
-			})
-			output.success("生成本地APP资源完成")
-
-
-			// 构建模板
-			output.success("开始构建模板数据...")
-			await buildtemplate(projectData, startParams).catch((err) => {
-				output.error(err)
-				throw new Error(err)
-			})
-			output.success("构建模板数据完成")
-
-
-			output.success("正在编译中...")
-			// // 开始构建
-			await buildapp({
-				fsPath: startParams.fsPath,
-				projectName: startParams.workspaceFolder.name
-			}).catch(err => {
-				output.error(err)
-				throw new Error(err)
-			})
-			output.success("APP打包完成")
-		})
-
+		},1000)
 	} catch (err) {
 		output.error(err)
 	}

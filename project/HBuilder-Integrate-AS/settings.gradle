@@ -1,4 +1,2 @@
 include ':simpleDemo'
 
-include ':aq-TestModule'
-include ':aq-Imageviewer'

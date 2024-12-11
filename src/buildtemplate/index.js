@@ -116,6 +116,7 @@ function buildAndroidManifest(params, workspaceFolder) {
 			if (!params.dcloud_appkey) {
 				throw "未配置离线AppKey"
 			}
+			const androidParams = params['app-plus'].distribute.android
 			// 获取插件的 permissions
 			let nativePluginsPermissions = getNativePluginsPermissions(params, workspaceFolder)
 
@@ -124,11 +125,15 @@ function buildAndroidManifest(params, workspaceFolder) {
 			permissions = permissions.map(getNameFromPermission).filter(it => it != null);
 			const appBuildGradle = Handlebars.compile(fs.readFileSync(dirname('../handlebars/AndroidManifest.xml.hbs'),
 				'utf-8'));
-			const androidManifest = appBuildGradle({
+			let content = {
 				dcloud_appkey: params.dcloud_appkey ?? '',
 				permissions: await Promise.all(permissions),
 				nativePluginsPermissions: await Promise.all(nativePluginsPermissions),
-			})
+			}
+			if(Number(androidParams.targetSdkVersion)>=31){
+				content['exported'] ='android:exported="true"'
+			}
+			const androidManifest = appBuildGradle(content)
 			const filePath = dirname('../../project/HBuilder-Integrate-AS/simpleDemo/src/main/AndroidManifest.xml')
 			if (await fsExtra.existsSync(filePath)) {
 				await fsExtra.rmSync(filePath);

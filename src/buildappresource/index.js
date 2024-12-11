@@ -77,7 +77,6 @@ async function checkAppResource(fsPath, clallBack) {
 		}
 		const id = setInterval(async () => {
 			if (await fsExtra.existsSync(resources)) {
-				output.success("okok")
 				clearInterval(id)
 				clallBack()
 			}
