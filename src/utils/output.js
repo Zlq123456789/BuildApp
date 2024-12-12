@@ -37,7 +37,7 @@ let outputChannel = null
 let endgine = null
 
 function ceaterEndgine() {
-	outputChannel = hx.window.createOutputChannel("foo");
+	outputChannel = hx.window.createOutputChannel("build-app");
 	outputChannel.show();
 	endgine = outputChannel.appendLine
 }
