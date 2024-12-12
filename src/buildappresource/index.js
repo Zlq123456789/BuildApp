@@ -21,6 +21,14 @@ function index(param) {
 			if (await fsExtra.existsSync(resources)) {
 				await rimraf.rimrafSync(resources)
 			}
+			output.success("正在生成本地资源")
+			// publish 生产资源命令不能监听到生成完成，所以监听目录创建完成
+			checkAppResource(param.fsPath, async () => {
+				await copyAppResource(param.fsPath).catch(err => {
+					reject(err)
+				})
+				resolve()
+			})
 			//  --host HBuilderX-extension
 			const publish =
 				`${ hx.env.appRoot}/cli publish --platform APP --type appResource --project ${param.projectName}` + (param
@@ -35,13 +43,7 @@ function index(param) {
 						try {
 							const value = iconv.decode(iconv.encode(stdout, 'base64'), 'gb2312')
 							// output.info(value)
-							output.success("正在生成本地资源")
-							checkAppResource(param.fsPath, async () => {
-								await copyAppResource(param.fsPath).catch(err => {
-									reject(err)
-								})
-								resolve()
-							})
+							
 						} catch (err) {
 							output.error(err)
 							reject(err)
@@ -77,12 +79,12 @@ async function checkAppResource(fsPath, clallBack) {
 		}
 		const id = setInterval(async () => {
 			if (await fsExtra.existsSync(resources)) {
-				clearInterval(id)
 				clallBack()
+				clearInterval(id)
 			}else{
 				output.info('资源包生成中...')
 			}
-		}, 2000)
+		}, 1000)
 		// fs.watch(resources, (eventType, filename) => {
 		//    output.success("创建成功")
 		// });
