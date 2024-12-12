@@ -31,6 +31,9 @@ const dirname = (filePath) => path.join(__dirname, filePath);
  * @param {Object} projectInfo 项目管理器选中的项目信息
  */
 async function showView(param) {
+	// 检查环境
+	output.success("检查环境...")
+
 
 	if (hx.env.appData.includes(('extensions_development'))) {
 		isExtension = true
@@ -69,7 +72,7 @@ async function showView(param) {
 			projectData.keyPassword = projectInfo[projectData.name].keyPassword
 			projectData.storeFile = projectInfo[projectData.name].storeFile
 			projectData.keyAlias = projectInfo[projectData.name].keyAlias
-			projectData.packageName =  projectInfo[projectData.name].packageName
+			projectData.packageName = projectInfo[projectData.name].packageName
 		}
 
 	}
@@ -105,8 +108,13 @@ async function showView(param) {
 
 	// 显示对话框，返回显示成功或者失败的信息，主要包含内置浏览器相关状态。
 	let promi = webviewDialog.show();
-	promi.then(function(data) {
-		console.log(data)
+	promi.then((data) => {
+		checkjava().then(_ => {
+			output.success("环境通过")
+		}).catch(err => {
+			output.error(err)
+			throw new Error(err)
+		})
 	}).catch(err => {
 		console.log(err);
 	})
@@ -162,23 +170,16 @@ async function submitApp(appInfo, webviewDialog, webview) {
 		})
 		if (startParams == null) return
 		webviewDialog.close();
-		setTimeout(() => {
+		start()
 
+		function start() {
 			let projectData = getProjectInfo(startParams);
 			projectData.dcloud_appkey = appKey
 			projectData.keyPassword = keyPassword
 			projectData.storeFile = storeFile
 			projectData.keyAlias = keyAlias
 			projectData.packageName = packageName
-			new Promise(async (resolve, reject) => {
-				// 检查环境
-				output.success("检查环境...")
-				await checkjava().catch(err => {
-					output.error(err)
-					throw new Error(err)
-				})
-				output.success("环境通过")
-
+			return new Promise(async (resolve, reject) => {
 
 				// 生成本地打包APP资源
 				output.success("生成本地APP资源: " + startParams.workspaceFolder.name)
@@ -212,9 +213,9 @@ async function submitApp(appInfo, webviewDialog, webview) {
 					throw new Error(err)
 				})
 				output.success("APP打包完成")
+				resolve()
 			})
-
-		},1000)
+		}
 	} catch (err) {
 		output.error(err)
 	}

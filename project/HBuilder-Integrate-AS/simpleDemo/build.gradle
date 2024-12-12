@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 34
     buildToolsVersion '30.0.3'
-    namespace 'uni.UNI9A78B7C111111'
+    namespace 'com.imeshcloud.wmspad'
     defaultConfig {
-        applicationId "uni.UNI9A78B7C111111"
-        minSdkVersion 24
-        targetSdkVersion 34
+        applicationId "com.imeshcloud.wmspad"
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode 100
         versionName "1.0.0"
         multiDexEnabled true
@@ -31,10 +31,10 @@ android {
 		}
     signingConfigs {
         config {
-            keyAlias 'key0'
-            keyPassword 'aa111111'
-            storeFile file('D:/kf/Android/key2/test.jks')
-            storePassword 'aa111111'
+            keyAlias 'imeshcloud'
+            keyPassword 'Imeshcloud@321.'
+            storeFile file('C:/D/code/wqgk-wms-pad/imeshcloud-jdk8.keystore')
+            storePassword 'Imeshcloud@321.'
             v1SigningEnabled true
             v2SigningEnabled true
         }
@@ -74,8 +74,24 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.5.0'
 		
 		
+		implementation 'androidx.camera:camera-core:1.2.3'
+		implementation 'androidx.camera:camera-camera2:1.2.3'
+		implementation 'androidx.camera:camera-lifecycle:1.2.3'
+		implementation 'androidx.camera:camera-view:1.2.3'
+		implementation 'com.google.android.material:material:1.4.+'
+		implementation 'com.github.donkingliang:ImageSelector:2.2.1'
+		implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+		implementation 'androidx.viewpager2:viewpager2:1.0.0'
+		implementation 'com.squareup.picasso:picasso:2.8'
+		implementation 'com.github.bumptech.glide:glide:4.9.0'
 
 
+// 
+// 	
+// 		implementation project(':aq-TestModule')
+// 	
+// 		implementation project(':aq-Imageviewer')
+// 	
 // 
 }
 

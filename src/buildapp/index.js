@@ -65,10 +65,12 @@ function copyFolder(sourceFolderPath, destinationFolderPath, params) {
 				await fsExtra.removeSync(destinationFolderPath);
 			}
 			await fsExtra.mkdirSync(destinationFolderPath);
-			await fsExtra.copySync(sourceFolderPath, destinationFolderPath + '/' + params.projectName + '.apk');
-			output.success("导出完成: " + destinationFolderPath + '/' + params.projectName + '.apk')
-			shell.exec(`${gradlePath}/gradle clean`)
-			resolve()
+			setTimeout( _=>{
+				fsExtra.copySync(sourceFolderPath, destinationFolderPath + '/' + params.projectName + '.apk');
+				output.success("导出完成: " + destinationFolderPath + '/' + params.projectName + '.apk')
+				shell.exec(`${gradlePath}/gradle clean`)
+				resolve()
+			},500)
 		} catch (err) {
 			output.error('导出: ' + err)
 			reject('导出: ' + err)

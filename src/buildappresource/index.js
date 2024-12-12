@@ -21,7 +21,6 @@ function index(param) {
 			if (await fsExtra.existsSync(resources)) {
 				await rimraf.rimrafSync(resources)
 			}
-			output.success("正在生成本地资源")
 			// publish 生产资源命令不能监听到生成完成，所以监听目录创建完成
 			checkAppResource(param.fsPath, async () => {
 				await copyAppResource(param.fsPath).catch(err => {
@@ -40,10 +39,11 @@ function index(param) {
 					fatal: true
 				}, (code, stdout, stderr) => {
 					if (code == 0) {
+						output.success("正在生成本地资源...")
 						try {
 							const value = iconv.decode(iconv.encode(stdout, 'base64'), 'gb2312')
 							// output.info(value)
-							
+
 						} catch (err) {
 							output.error(err)
 							reject(err)
@@ -81,8 +81,8 @@ async function checkAppResource(fsPath, clallBack) {
 			if (await fsExtra.existsSync(resources)) {
 				clallBack()
 				clearInterval(id)
-			}else{
-				output.info('资源包生成中...')
+			} else {
+				// output.info('资源包生成中...')
 			}
 		}, 1000)
 		// fs.watch(resources, (eventType, filename) => {
@@ -104,24 +104,20 @@ function copyAppResource(fsPath) {
 				await rimraf.rimrafSync(projectPath)
 			}
 			await fsExtra.copySync(baseProjectPath, projectPath);
-			
-			const result = shell.ls(fsPath + '/unpackage/resources')
+
 			// shell.rm
-			if (result.code === 0) {
-				const filePath = dirname('../../project/HBuilder-Integrate-AS/simpleDemo/src/main/assets/apps')
-				if (await fsExtra.existsSync(filePath)) {
-					await rimraf.rimrafSync(filePath)
-				} else {
-					await fsExtra.mkdirSync(filePath);
-				}
-				await copyFolder(fsPath + '/unpackage/resources', filePath).catch((err) => {
-					reject(err)
-				})
-				resolve()
+			const filePath = dirname('../../project/HBuilder-Integrate-AS/simpleDemo/src/main/assets/apps')
+			if (await fsExtra.existsSync(filePath)) {
+				await rimraf.rimrafSync(filePath)
 			} else {
-				reject(result.stderr)
+				await fsExtra.mkdirSync(filePath);
 			}
+			await copyFolder(fsPath + '/unpackage/resources', filePath).catch((err) => {
+				reject(err)
+			})
+			resolve()
 		} catch (err) {
+			output.error("copyAppResource" + err)
 			reject(result.stderr)
 		}
 	})
@@ -131,10 +127,13 @@ function copyAppResource(fsPath) {
 function copyFolder(sourceFolderPath, destinationFolderPath) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			await fsExtra.copySync(sourceFolderPath, destinationFolderPath);
-			output.success("拷贝本地APP资源完成")
-			resolve()
+			fsExtra.copy(sourceFolderPath, destinationFolderPath,()=>{
+				output.success("拷贝本地APP资源完成")
+				resolve()
+			});
+		
 		} catch (err) {
+			output.error("copyFolder: "+err)
 			reject(err)
 		}
 	})
