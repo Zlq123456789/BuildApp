@@ -42,8 +42,7 @@ function index(param) {
 						output.success("正在生成本地资源...")
 						try {
 							const value = iconv.decode(iconv.encode(stdout, 'base64'), 'gb2312')
-							// output.info(value)
-
+							output.info(value)
 						} catch (err) {
 							output.error(err)
 							reject(err)
