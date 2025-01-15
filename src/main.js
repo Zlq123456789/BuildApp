@@ -14,6 +14,7 @@ const buildtemplate = require('./buildtemplate/index.js');
 const buildappresource = require('./buildappresource/index.js');
 const buildapp = require('./buildapp/index.js');
 const checkjava = require('./checkjava/index.js');
+const openKeyStore = require('./openKeyStore/index.js');
 const {
 	log
 } = require('util');
@@ -31,8 +32,7 @@ const dirname = (filePath) => path.join(__dirname, filePath);
  * @param {Object} projectInfo 项目管理器选中的项目信息
  */
 async function showView(param) {
-	// 检查环境
-	output.success("检查环境...")
+
 
 
 	if (hx.env.appData.includes(('extensions_development'))) {
@@ -101,6 +101,24 @@ async function showView(param) {
 				let imgType = msg.data;
 				selectImg(imgType, webviewDialog, webview);
 				break;
+			case 'openInBrowser':
+				const url = msg.data;
+				hx.env.openExternal("https://dev.dcloud.net.cn/pages/app/detail/info?appid=" + param.workspaceFolder
+					.appid)
+				break;
+			case 'openKeyStore': //查看证书信息
+				const path = msg.data.path;
+				const storepass = msg.data.storepass;
+				if (!path || !storepass) {
+					webviewDialog.displayError("证书密钥、证书文件不能为空!");
+					return
+				}
+				openKeyStore(path, storepass).then(_ => {}).catch(err => {
+						webviewDialog.displayError(err);
+					// output.error(err)
+					// throw new Error(err)
+				})
+				break;
 			default:
 				break;
 		};
@@ -109,12 +127,7 @@ async function showView(param) {
 	// 显示对话框，返回显示成功或者失败的信息，主要包含内置浏览器相关状态。
 	let promi = webviewDialog.show();
 	promi.then((data) => {
-		checkjava().then(_ => {
-			output.success("环境通过")
-		}).catch(err => {
-			output.error(err)
-			throw new Error(err)
-		})
+
 	}).catch(err => {
 		console.log(err);
 	})
@@ -170,6 +183,16 @@ async function submitApp(appInfo, webviewDialog, webview) {
 		})
 		if (startParams == null) return
 		webviewDialog.close();
+
+		// 检查环境
+		output.success("检查环境...")
+		checkjava().then(_ => {
+			output.success("环境通过")
+		}).catch(err => {
+			output.error(err)
+			throw new Error(err)
+		})
+
 		start()
 
 		function start() {

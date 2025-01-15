@@ -52,8 +52,8 @@ function Html(projectData) {
 										</div>
 										<div class="form-group row m-0 mt-3">
 										    <label for="repo-type" class="col-sm-2 col-form-label">私钥密码</label>
-										    <div class="col-sm-10">
-										        <input type="password"  class="form-control outline-none" v-model="appInfo.keyPassword" placeholder="证书私钥密码"/>
+										    <div class="col-sm-10" password>
+										        <input type="text"  class="form-control outline-none" v-model="appInfo.keyPassword" placeholder="证书私钥密码"/>
 										    </div>
 										</div>
 										<div class="form-group row m-0 mt-3">
@@ -67,6 +67,11 @@ function Html(projectData) {
 										    <label for="repo-type" class="col-sm-2 col-form-label">App Key</label>
 										    <div class="col-sm-10">
 										        <input type="text"  class="form-control outline-none" v-model="appInfo.appKey" placeholder="离线打包配置中的AppKey"/>
+														<div style="height:5px"></div>
+														<div style="display: flex;align-items: center;gap: 10px;padding-left: 10px;">
+															<div @click="openInBrowser()" style="font-size:14px;color:blue;width: fit-content;">配置</div>
+															<div @click="openKeyStore()" style="font-size:14px;color:blue;width: fit-content;">查看证书信息</div>
+														</div>
 										    </div>
 										</div>
                 </form>
@@ -131,6 +136,22 @@ function Html(projectData) {
                                 this.appInfo.platforms.push(data);
                             };
                         },
+												openInBrowser() {
+												      // 发送消息给 Vue 组件，让其在外部打开浏览器
+															hbuilderx.postMessage({
+												        command: 'openInBrowser',
+												        data: 'url'
+												      });
+												},
+												openKeyStore(path){
+													hbuilderx.postMessage({
+													  command: 'openKeyStore',
+													  data: {
+															path:this.appInfo.storeFile,
+															storepass:this.appInfo.keyPassword,
+														}
+													});
+												},
                         uploadImg(imgType) {
                             hbuilderx.postMessage({
                                 command: 'uploadImg',
