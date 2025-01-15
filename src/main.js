@@ -184,16 +184,7 @@ async function submitApp(appInfo, webviewDialog, webview) {
 		if (startParams == null) return
 		webviewDialog.close();
 
-		// 检查环境
-		output.success("检查环境...")
-		checkjava().then(_ => {
-			output.success("环境通过")
-		}).catch(err => {
-			output.error(err)
-			throw new Error(err)
-		})
-
-		start()
+	
 
 		function start() {
 			let projectData = getProjectInfo(startParams);
@@ -239,6 +230,19 @@ async function submitApp(appInfo, webviewDialog, webview) {
 				resolve()
 			})
 		}
+		
+		setTimeout(()=>{
+			// 检查环境
+			output.success("检查环境...")
+			checkjava().then(_ => {
+				output.success("环境通过")
+			}).catch(err => {
+				output.error(err)
+				throw new Error(err)
+			})
+			
+			start()
+		},1000)
 	} catch (err) {
 		output.error(err)
 	}
