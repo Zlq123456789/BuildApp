@@ -42,9 +42,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+		
     aaptOptions {
         additionalParameters '--auto-add-overlay'
         ignoreAssetsPattern "!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"
+    }
+		
+    packagingOptions {
+            pickFirst 'lib/*/libc++_shared.so'
     }
 }
 

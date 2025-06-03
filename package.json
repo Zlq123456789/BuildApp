@@ -1,8 +1,8 @@
 {
-	"id": "webviewdialog",
-	"name": "webviewdialog-example",
-	"description": "webviewDialog示例",
-	"displayName": "webviewDialog示例",
+	"id": "aq-BuildApp",
+	"name": "BuildApp",
+	"description": "本地打包",
+	"displayName": "本地打包",
 	"version": "0.0.1",
 	"publisher": "hx",
 	"engines": {
@@ -20,12 +20,6 @@
 			{
 				"command": "extension.publishApp",
 				"title": "本地构建APP"
-			},
-			{
-				"name": "安装apk到android手机",
-				"command": "echo '安装apk到android手机'",
-				"type": "terminal",
-				"key": ""
 			}
 		],
 		"menus": {

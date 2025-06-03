@@ -1,33 +1,34 @@
 {
-  "nativePlugins": [
-    {
-      "hooksClass": "com.example.aq.appHook",
-      "plugins": [
-        {
-          "type": "module",
-          "name": "aq-TestModule",
-          "class": "com.example.aq.TestModule"
-        }
-      ]
-    },
-    {
-      "plugins": [
-        {
-          "type": "component",
-          "name": "myText",
-          "class": "io.dcloud.uniplugin.TestText"
-        }
-      ]
-    },
-    {
-      "hooksClass": "",
-      "plugins": [
-        {
-          "type": "module",
-          "name": "DCloud-RichAlert",
-          "class": "uni.dcloud.io.uniplugin_richalert.RichAlertModule"
-        }
-      ]
-    }
-  ]
+	"nativePlugins": [{
+			"hooksClass": "com.example.aq.appHook",
+			"plugins": [{
+				"type": "module",
+				"name": "aq-TestModule",
+				"class": "com.example.aq.TestModule"
+			}]
+		},
+		{
+			"plugins": [{
+				"type": "component",
+				"name": "myText",
+				"class": "io.dcloud.uniplugin.TestText"
+			}]
+		},
+		{
+			"hooksClass": "",
+			"plugins": [{
+				"type": "module",
+				"name": "DCloud-RichAlert",
+				"class": "uni.dcloud.io.uniplugin_richalert.RichAlertModule"
+			}]
+		},
+		{
+			"hooksClass": "",
+			"plugins": [{
+				"type": "module",
+				"name": "aq-document",
+				"class": "com.zlq.aq_document.UniMian"
+			}]
+		}
+	]
 }
